@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER SUS - Terminal d'Opération</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="background-grid"></div>
+
+    <header>
+        <div class="logo">[CYBER_SUS]</div>
+        <nav>
+            <a href="#">ACCUEIL</a>
+            <a href="#">MISSIONS</a>
+            <a href="#">RAPPORTS</a>
+            <a href="#">BASE DE DONNÉES</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1 class="glitch" data-text="SYSTÈME INFILTRÉ">SYSTÈME INFILTRÉ</h1>
+            <p class="subtitle">> Dernière activité détectée : <span class="status-online">EN LIGNE</span></p>
+            <p class="description">Identifiez les imposteurs. Sécurisez le réseau. Survivez.</p>
+            <button class="cta-button">DÉMARRER L'ANALYSE</button>
+        </section>
+    </main>
+
+</body>
+</html>
+
+:root {
+    --bg-color: #0a0a0a;
+    --text-color: #ffffff;
+    --accent-color: #00ff41;
+    --secondary-color: #00bfff;
+    --font-mono: 'Roboto Mono', monospace;
+    --font-sans: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-sans);
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.background-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px), 
+                      linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: -1;
+    animation: grid-move 10s linear infinite;
+}
+
+@keyframes grid-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    font-family: var(--font-mono);
+    font-weight
