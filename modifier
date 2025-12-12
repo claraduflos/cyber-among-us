@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER SUS - Terminal d'Opération</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="background-grid"></div>
+
+    <header>
+        <div class="logo">[CYBER_SUS]</div>
+        <nav>
+            <a href="#">ACCUEIL</a>
+            <a href="#">MISSIONS</a>
+            <a href="#">RAPPORTS</a>
+            <a href="#">BASE DE DONNÉES</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1 class="glitch" data-text="SYSTÈME INFILTRÉ">SYSTÈME INFILTRÉ</h1>
+            <p class="subtitle">> Dernière activité détectée : <span class="status-online">EN LIGNE</span></p>
+            <p class="description">Identifiez les imposteurs. Sécurisez le réseau. Survivez.</p>
+            <button class="cta-button">DÉMARRER L'ANALYSE</button>
+        </section>
+    </main>
+
+</body>
+</html>
+:root {
+    --bg-color: #0a0a0a;
+    --text-color: #ffffff;
+    --accent-color: #00ff41;
+    --secondary-color: #00bfff;
+    --font-mono: 'Roboto Mono', monospace;
+    --font-sans: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-sans);
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.background-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px), 
+                      linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: -1;
+    animation: grid-move 10s linear infinite;
+}
+
+@keyframes grid-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    font-family: var(--font-mono);
+    font-weight
+const terminal = document.getElementById("terminal");
+const logs = [
+    "[SECURITY] Initialisation du système...",
+    "[LOG] Scan des ports en cours...",
+    "[ALERTE] Activité suspecte détectée.",
+    "[CREW] Analyse des fichiers systèmes...",
+    "[IMPOSTOR] Injection de code détectée.",
+    "[CREW] Tentative de confinement du malware...",
+    "[SYSTEM] Reboot du pare-feu terminé."
+];
+
+let i = 0;
+
+function writeLog() {
+    if (i < logs.length) {
+        const line = document.createElement("div");
+        line.textContent = logs[i];
+        terminal.appendChild(line);
+        terminal.scrollTop = terminal.scrollHeight;
+        i++;
+        setTimeout(writeLog, 1000);
+    }
+}
+
+writeLog();
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+app.use(express.static(__dirname));
+
+let players = {};
+let sabotage = false;
+let impostorId = null;
+
+io.on("connection", (socket) => {
+  console.log("Connecté:", socket.id);
+
+  players[socket.id] = {
+    x: 100,
+    y: 200,
+    role: "crew"
+  };
+
+  // L'admin est le 1er joueur
+  if (Object.keys(players).length === 1) {
+    players[socket.id].role = "admin";
+  }
+
+  // Définir un imposteur automatiquement
+  if (!impostorId && Object.keys(players).length >= 2) {
+    const ids = Object.keys(players);
+    impostorId = ids[Math.floor(Math.random() * ids.length)];
+    players[impostorId].role = "impostor";
+  }
+
+  socket.emit("init", { players, sabotage, impostorId });
+  io.emit("playersUpdate", players);
+
+  socket.on("move", (data) => {
+    if (players[socket.id]) {
+      players[socket.id].x = data.x;
+      players[socket.id].y = data.y;
+      socket.broadcast.emit("playerMoved", { id: socket.id, data });
+    }
+  });
+
+  socket.on("sabotage", () => {
+    if (players[socket.id]?.role === "impostor") {
+      sabotage = true;
+      io.emit("sabotage", true);
+    }
+  });
+
+  socket.on("repair", () => {
+    if (players[socket.id]?.role === "crew" || players[socket.id]?.role === "admin") {
+      sabotage = false;
+      io.emit("sabotage", false);
+    }
+  });
+
+  // Voice chat (signaling WebRTC)
+  socket.on("voice", (data) => {
+    socket.broadcast.emit("voice", {
+      from: socket.id,
+      signal: data
+    });
+  });
+
+  socket.on("disconnect", () => {
+    delete players[socket.id];
+
+    if (socket.id === impostorId) impostorId = null;
+
+    io.emit("playersUpdate", players);
+    io.emit("playerDisconnected", socket.id);
+  });
+});
+
+server.listen(3000, () => console.l
+// server.mjs
+import { createServer } from 'node:http';
+
+const server = createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Hello World!\n');
+});
+
+// starts a simple http server locally on port 3000
+server.listen(3000, '127.0.0.1', () => {
+  console.log('Listening on 127.0.0.1:3000');
+});
+
+// run with `node server.mjs`
