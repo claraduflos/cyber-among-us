@@ -1,0 +1,157 @@
+https://b0668ff4-be72-4003-a060-c967b1c810a5-00-r34ft90agsg3.kirk.repl.co/
+// server.mjs
+import { createServer } from 'node:http';
+
+const server = createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Hello World!\n');
+});
+
+// starts a simple http server locally on port 3000
+server.listen(3000, '127.0.0.1', () => {
+  console.log('Listening on 127.0.0.1:3000');
+});
+
+// run with `node server.mjs`
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+app.use(express.static(__dirname));
+
+let players = {};
+let sabotage = false;
+let impostorId = null;
+
+io.on("connection", (socket) => {
+  console.log("Connecté:", socket.id);
+
+  players[socket.id] = {
+    x: 100,
+    y: 200,
+    role: "crew"
+  };
+
+  // L'admin est le 1er joueur
+  if (Object.keys(players).length === 1) {
+    players[socket.id].role = "admin";
+  }
+
+  // Définir un imposteur automatiquement
+  if (!impostorId && Object.keys(players).length >= 2) {
+    const ids = Object.keys(players);
+    impostorId = ids[Math.floor(Math.random() * ids.length)];
+    players[impostorId].role = "impostor";
+  }
+
+  socket.emit("init", { players, sabotage, impostorId });
+  io.emit("playersUpdate", players);
+
+  socket.on("move", (data) => {
+    if (players[socket.id]) {
+      players[socket.id].x = data.x;
+      players[socket.id].y = data.y;
+      socket.broadcast.emit("playerMoved", { id: socket.id, data });
+    }
+  });
+
+  socket.on("sabotage", () => {
+    if (players[socket.id]?.role === "impostor") {
+      sabotage = true;
+      io.emit("sabotage", true);
+    }
+  });
+
+  socket.on("repair", () => {
+    if (players[socket.id]?.role === "crew" || players[socket.id]?.role === "admin") {
+      sabotage = false;
+      io.emit("sabotage", false);
+    }
+  });
+
+  // Voice chat (signaling WebRTC)
+  socket.on("voice", (data) => {
+    socket.broadcast.emit("voice", {
+      from: socket.id,
+      signal: data
+    });
+  });
+
+  socket.on("disconnect", () => {
+    delete players[socket.id];
+
+    if (socket.id === impostorId) impostorId = null;
+
+    io.emit("playersUpdate", players);
+    io.emit("playerDisconnected", socket.id);
+  });
+});
+
+server.listen(3000, () => console.l
+const terminal = document.getElementById("terminal");
+const logs = [
+    "[SECURITY] Initialisation du système...",
+    "[LOG] Scan des ports en cours...",
+    "[ALERTE] Activité suspecte détectée.",
+    "[CREW] Analyse des fichiers systèmes...",
+    "[IMPOSTOR] Injection de code détectée.",
+    "[CREW] Tentative de confinement du malware...",
+    "[SYSTEM] Reboot du pare-feu terminé."
+];
+
+let i = 0;
+
+function writeLog() {
+    if (i < logs.length) {
+        const line = document.createElement("div");
+        line.textContent = logs[i];
+        terminal.appendChild(line);
+        terminal.scrollTop = terminal.scrollHeight;
+        i++;
+        setTimeout(writeLog, 1000);
+    }
+}
+
+writeLog();
+ color: var(--text-color);
+    font-family: var(--font-sans);
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.background-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px), 
+                      linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: -1;
+    animation: grid-move 10s linear infinite;
+}
+
+@keyframes grid-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    font-family: var(--font-mono);
+    font-weight
+npm init -y
+npm install express socket.io
+node server.js
